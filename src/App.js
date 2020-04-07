@@ -11,9 +11,9 @@ class App extends React.Component {
     };
   }
 
-  //need to run json-server public/db.json --port 8000
+  //need to run json-server public/db.json --port 8080
   componentDidMount(){
-    fetch("http://localhost:8000/products").then(res => res.json())
+    fetch("http://localhost:8080/products").then(res => res.json())
     .then(data => this.setState({
       products: data,
       filteredProducts: data
