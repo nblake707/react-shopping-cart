@@ -1,6 +1,7 @@
 import React from "react";
 import Products from "./Components/Products";
 import Filter from "./Components/Filter";
+import Basket from "./Components/Basket";
 
 class App extends React.Component {
   //intializing state in the constructor
@@ -9,6 +10,7 @@ class App extends React.Component {
     this.state = {
       products: [], // Array that holds results from
       filteredProducts: [], // Needed to present a sorted array to the user
+      cartItems: [], //Array holding all items in cart
       sort: "", // holds the user sort preferences - selection is made in the filter component
       size: "" // holds the user size preferences - selection is made in the filter component
     };
@@ -31,10 +33,13 @@ class App extends React.Component {
       );
   }
 
-  //  handleChangeSort = (e) => {
-  //   this.setState({sort: e.target.value});
-  //   this.listProducts();
-  // }
+  handleRemoveCart(e) {
+
+  }
+
+  handleAddCart(e){
+
+  }
 
   // This event handler is passed into the filter component
   handleChangeSort(e) {
@@ -67,7 +72,7 @@ class App extends React.Component {
       //////////////// Filtering By Size ////////////////////////
       if (state.size !== "") {
         return {
-          filteredProducts: state.products.filer(
+          filteredProducts: state.products.filter(
             a =>
               //indexOf returns the index value of a particular array element. Returns -1 if not found
               a.availableSizes.indexOf(state.size.toUpperCase()) >= 0
@@ -90,13 +95,20 @@ class App extends React.Component {
               size={this.state.size}
               sort={this.state.sort}
               handleChangeSize={this.handleChangeSize}
-              handleChangeSort={this.handleChangeSort} //
+              handleChangeSort={this.handleChangeSort} 
               count={this.state.filteredProducts.length}
             />
             <br />
-            <Products products={this.state.filteredProducts} />
+            <Products 
+              products={this.state.filteredProducts}
+              handleAddToCart={this.handleAddCart} />
           </div>
-          <div className="col-md-4"></div>
+          <div className="col-md-4">
+            <Basket 
+              cartItems={this.state.cartItems}
+              handleRemoveFromCart={this.handleRemoveCart}
+            />
+          </div>
         </div>
       </div>
     );
