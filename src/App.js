@@ -4,13 +4,13 @@ import Filter from "./Components/Filter";
 import Basket from "./Components/Basket";
 
 class App extends React.Component {
-  //intializing state in the constructor
+  // intializing state in the constructor
   constructor(props) {
     super(props);
     this.state = {
       products: [], // Array that holds results from
       filteredProducts: [], // Needed to present a sorted array to the user
-      cartItems: [], //Array holding all items in cart
+      cartItems: [], // Array holding all items in cart
       sort: "", // holds the user sort preferences - selection is made in the filter component
       size: "" // holds the user size preferences - selection is made in the filter component
     };
@@ -19,6 +19,7 @@ class App extends React.Component {
     // binding event handler to 'this' keyword : could also write the function in arrow notation for the same effect
     this.handleChangeSort = this.handleChangeSort.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
+    this.handleAddCart = this.handleAddCart.bind(this);
   }
 
   // need to run json-server public/db.json --port 8080
@@ -31,13 +32,32 @@ class App extends React.Component {
           filteredProducts: data
         })
       );
+      if(localStorage.getItem('cartItem')){
+        this.setState({cartItems: JSON.parse(localStorage.getItem('cartItems'))});
+      }
   }
 
   handleRemoveCart(e) {
 
   }
 
-  handleAddCart(e){
+  handleAddCart(e, product){
+    this.setState(state => {
+      const cartItems = state.cartItems;
+      let productAlreadyIncart = false;
+      cartItems.forEach(item => {
+        if (item.id === product.id){
+          productAlreadyIncart = true;
+          item.count += 1;
+        }
+      });
+      if(!productAlreadyIncart){
+        cartItems.push({...product, count:1});
+      }
+      localStorage.setItem("cartItems", JSON.stringify(cartItems)); // https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem | https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
+      return cartItems;
+
+    })
 
   }
 
@@ -52,7 +72,7 @@ class App extends React.Component {
     this.listProducts();
   }
 
-  // handles how the products are filtered on the page
+  // logic that allows users to filter page items
   listProducts() {
     this.setState(state => {
       //////////////// Filtering By Price ////////////////////////
@@ -89,7 +109,7 @@ class App extends React.Component {
       <div className="container">
         <h1>Ecommerce Shopping Cart Application</h1>
         <hr />
-        <div classname="row">
+        <div className="row">
           <div className="col-md-8">
             <Filter
               size={this.state.size}

@@ -25,7 +25,7 @@ class Product extends Component {
     )
     );
 
-    return <div classname="row">{productItems}</div>;
+    return <div className="row">{productItems}</div>;
   }
 }
 

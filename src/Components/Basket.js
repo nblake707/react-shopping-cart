@@ -11,6 +11,26 @@ export default class Basket extends Component {
         ) : (
           <div> You have {cartItems.length} products in the basket.</div>
         )}
+        {cartItems.length > 0 && (
+          <div>
+            <ul>
+              {cartItems.map(item => (
+                <li key={item.id}>
+                  <b>{item.title}</b>
+                  X {item.count}
+
+                  {console.log(item.count)}
+                  <button
+                    className="btn btn-danger"
+                    onClick={e => this.handleRemoveFromCart(e, item)}
+                  >
+                    X
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   }
